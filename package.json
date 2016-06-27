@@ -1,7 +1,22 @@
 {
   "name": "swagger-fakeapi",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Run contract (Swagger 2.0) based server that generates fake data.",
+  "license": "Unlicensed",
+  "repository": "Icelandair/node.swagger-fakeapi",
+  "author": {
+    "name": "Icelandair Digital Labs",
+    "email": "labs@icelandair.is",
+    "url": "https://labs.icelandair.com"
+  },
+  "contributors": [
+    "Benedikt D Valdez <benedikt@kolibri.is>",
+    "Borgar <borgar@borgar.net>",
+    "Garpur Dagsson <garpur@kolibri.is>"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
