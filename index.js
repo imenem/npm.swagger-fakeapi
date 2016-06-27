@@ -4,7 +4,6 @@ const XorShift = require('xorshift').constructor
 const range = require('array-range')
 
 const crypto = require('crypto')
-const path = require('path')
 const glob = require('glob')
 
 function seedFrom(str) {
@@ -22,7 +21,7 @@ function getRandomizer(seed) {
 const syll = 'na,ni,no,ma,mi,my,de,ba,be,bu,ko,ke,so,sy,ru,ra,re,wo,wu,fe,fo,fi'.split(',')
 function fakeWord(rnd, scount) {
   const sc = scount || 1 + Math.floor(rnd.random() * 4)
-  const w = range(sc).map(d => { return syll[Math.floor(rnd.random() * syll.length)] }).join('')
+  const w = range(sc).map(() => syll[Math.floor(rnd.random() * syll.length)]).join('')
   return w[0].toUpperCase() + w.slice(1).toLowerCase()
 }
 
@@ -37,21 +36,22 @@ function fakeId(rnd) {
 
 function fakeTitle(rnd) {
   const wc = 2 + Math.floor(rnd.random() * 5)
-  return range(wc).map( d => { return fakeWord(rnd) }).join(' ')
+  return range(wc).map(() => fakeWord(rnd)).join(' ')
 }
 
 function fakeParagraph(rnd, minLines = 1, maxLines = 4) {
   const sc = minLines + Math.floor(rnd.random() * maxLines)
   const wc = 2 + Math.floor(rnd.random() * 7)
-  return range(sc).map(d => {
-    const sent = range(wc).map( d => { return fakeWord(rnd) }).join(' ')
+  const paragraph = range(sc).map(() => {
+    const sent = range(wc).map(() => fakeWord(rnd)).join(' ')
     return sent[0].toUpperCase() + sent.slice(1).toLowerCase()
-  }).join('. ') + '.'
+  }).join('. ')
+  return `${paragraph}.`
 }
 
 function fakePath(rnd) {
   const wc = 1 + Math.floor(rnd.random() * 5)
-  const path = range(wc).map( d => { return fakeWord(rnd).toLowerCase() })
+  const path = range(wc).map(() => fakeWord(rnd).toLowerCase())
   return `/${path.join('/')}/`
 }
 
@@ -60,7 +60,7 @@ function fakeSlug(rnd) {
 }
 
 function fakeString(rnd, name, stack) {
-  let r = '';
+  let r = ''
   if (/(?:id)$/i.test(name)) {
     r = fakeId(rnd)
   }
@@ -77,13 +77,13 @@ function fakeString(rnd, name, stack) {
     r = fakePath(rnd)
   }
   else if (/(?:url|uri)$/i.test(name)) {
-    if ( /\b(media|img|image)\b/i.test( stack.join(',') ) ) {
+    if (/\b(media|img|image)\b/i.test(stack.join(','))) {
       const w = 700 + Math.floor(rnd.random() * 4) * 100
       const h = 700 + Math.floor(rnd.random() * 4) * 100
       r = `https://placekitten.com/${w}/${h}`
     }
     else {
-      r = '//localhost' + fakePath(rnd)
+      r = `//localhost${fakePath(rnd)}`
     }
   }
   else if (/(?:alt|summary)$/i.test(name)) {
@@ -96,23 +96,21 @@ function fakeString(rnd, name, stack) {
 }
 
 function fakeObject(rnd, schema, stack = []) {
-  const ret = {};
+  const ret = {}
   const fields = schema.required || []
-  fields.forEach(function (key) {
+  fields.forEach((key) => {
     const field = schema.properties[key]
     if (field.type === 'array') {
       // N many items should generate (this can be min/maxed by params)
-      ret[key] = range( 1 + Math.floor(rnd.random() * 4) ).map(d => {
-        return fakeObject(rnd, field.items, stack.concat([key]))
-      })
+      ret[key] = range(1 + Math.floor(rnd.random() * 4)).map(() => fakeObject(rnd, field.items, stack.concat([key])))
     }
     else if (!field.type || field.type === 'object') {
       const obj = fakeObject(rnd, field, stack.concat([key]))
       ret[key] = obj
       if (field.additionalProperties) {
-        range( 1 + Math.floor(rnd.random() * 3) ).map(d => {
+        range(1 + Math.floor(rnd.random() * 3)).map(() => (
           obj[fakeId(rnd)] = fakeObject(rnd, field.additionalProperties, stack.concat([key]))
-        })
+        ))
       }
     }
     else if (field.type === 'string') {
@@ -126,48 +124,43 @@ function fakeObject(rnd, schema, stack = []) {
 }
 
 
-const server = new swagger.Server()
-const basePath = 'contracts'
-const upstream = path.join(basePath, 'upstream')
+module.exports = function (contractsFolder) {
+  const server = new swagger.Server()
 
-glob.sync(`${upstream}/**/*.yml`).forEach(contractFileName => {
+  glob.sync(`${contractsFolder}/**/*.yml`).forEach(contractFileName => {
+    server.parse(contractFileName)
+    swaggerParser.validate(contractFileName)
+      .then(api => {
+        for (const pathKey of api.paths) {
+          const apiMethod = api.paths[pathKey]
+          for (const method of apiMethod) {
+            server[method](api.basePath + pathKey, (req, res) => {
+              // use a consistent seed throughout the response to ensure deterministic responses
+              const seed = seedFrom(req.url)
+              res.header('X-FakeAPI-seed', seed)
 
-  server.parse(contractFileName)
-  swaggerParser.validate(contractFileName)
-    .then(api => {
-      for (var pathKey in api.paths) {
-        const apiMethod = api.paths[pathKey]
-        for (var method in apiMethod) {
-          server[method](api.basePath + pathKey, function ( req, res, next ) {
-            // use a consistent seed throughout the response to ensure deterministic responses
-            const seed = seedFrom(req.url)
-            res.header('X-FakeAPI-seed', seed)
+              const apiRes = apiMethod[method].responses[200]
 
-            const apiRes = apiMethod[method].responses[200]
+              // fabricate headers
+              const headRand = getRandomizer(seed)
+              for (const header of apiRes.headers) {
+                const headerval = fakeString(headRand, header)
+                res.header(header, headerval)
+              }
 
-            // fabricate headers
-            const headRand = getRandomizer(seed)
-            for (var header in apiRes.headers) {
-              let headerval = fakeString(headRand, header);
-              res.header(header, headerval)
-            }
-
-            // fabricate headers
-            const bodyRand = getRandomizer(seed)
-            const body = fakeObject(bodyRand, apiRes.schema, [pathKey])
-            res.send(body)
-          })
+              // fabricate headers
+              const bodyRand = getRandomizer(seed)
+              const body = fakeObject(bodyRand, apiRes.schema, [pathKey])
+              res.send(body)
+            })
+          }
         }
-      }
-    })
-    .catch(function(err) {
-      console.error('Onoes! The API is invalid. ' + err.message)
-    })
+      })
+      .catch((err) => console.error(`Onoes! The API is invalid. ${err.message}`))
+  })
 
-})
+  const port = process.env.PORT || 8000
+  server.listen(port, () => console.log(`The Swagger server is now running at //localhost:${port}`))
 
-
-// Start listening on port 8000
-server.listen(8000, function() {
-  console.log('The Swagger server is now running at http://localhost:8000')
-})
+  return server
+}

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -12,5 +13,10 @@
     "swagger-parser": "^4.0.0-beta.2",
     "swagger-server": "^1.0.0-alpha.18",
     "xorshift": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^2.13.1",
+    "eslint-config-icelandair": "^1.0.0",
+    "eslint-plugin-import": "^1.9.2",
   }
 }

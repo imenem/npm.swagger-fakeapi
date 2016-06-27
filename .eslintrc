@@ -1,0 +1,15 @@
+---
+extends: icelandair
+
+env:
+  browser: false
+  node: true
+  es6: true
+
+rules:
+  brace-style: [error, stroustrup]
+  no-console: off
+  no-param-reassign: off
+  no-underscore-dangle: off
+  no-unsafe-finally: off
+  no-useless-computed-key: off
