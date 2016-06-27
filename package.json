@@ -1,0 +1,16 @@
+{
+  "name": "swagger-fakeapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "array-range": "^1.0.1",
+    "glob": "^7.0.5",
+    "swagger-parser": "^4.0.0-beta.2",
+    "swagger-server": "^1.0.0-alpha.18",
+    "xorshift": "^0.2.0"
+  }
+}
