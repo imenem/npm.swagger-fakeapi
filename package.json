@@ -19,8 +19,11 @@
   },
   "main": "index.js",
   "scripts": {
+    "dev": "supervisor --quiet --watch index.js,lib,test --no-restart-on exit --exec npm -- run test --silent",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "watch": "NODE_ENV=development supervisor --quiet --watch index.js,lib,test --no-restart-on exit --exec npm -- run start --silent",
+    "test": "NODE_ENV=test nyc --reporter=text --reporter=html ava"
   },
   "dependencies": {
     "array-range": "^1.0.1",
@@ -30,8 +33,21 @@
     "xorshift": "^0.2.0"
   },
   "devDependencies": {
+    "ava": "^0.15.2",
+    "babel-eslint": "^6.1.0",
     "eslint": "^2.13.1",
     "eslint-config-icelandair": "^1.0.0",
     "eslint-plugin-import": "^1.9.2",
+    "nyc": "^6.6.1",
+    "supertest": "^1.2.0",
+    "supertest-as-promised": "^3.1.0",
+    "supervisor": "^0.11.0"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ],
+    "failFast": true,
+    "verbose": true
   }
 }

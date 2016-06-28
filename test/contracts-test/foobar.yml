@@ -1,0 +1,97 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Foo bar
+host: domain.com
+basePath: /api/v1/foo
+schemes:
+  - https
+produces:
+  - application/json; charset=utf-8
+paths:
+  /{fooId}/:
+    get:
+      summary: Get foo
+      operationId: getFoo
+      parameters:
+        - $ref: "#/parameters/accept"
+        - $ref: "#/parameters/correlationId"
+        - $ref: "#/parameters/locationId"
+        - $ref: "#/parameters/languageId"
+        - $ref: "#/parameters/fooId"
+      responses:
+        200:
+          headers:
+            X-Correlation-Id:
+              description: Correlation ID
+              type: string
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/Foo'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+parameters:
+  accept:
+    name: Accept
+    in: header
+    required: true
+    type: string
+  correlationId:
+    name: "X-Correlation-Id"
+    in: header
+    required: true
+    type: string
+  locationId:
+    name: locationId
+    in: query
+    required: true
+    description: Country code ID using ISO 3166-1 alpha-2 spec (roughly equivalent to top level domains).
+    type: string
+  languageId:
+    name: languageId
+    in: query
+    required: true
+    description: The id of the language to use using BCP47 spec (same as HTML lang attribute).
+    type: string
+  fooId:
+    name: fooId
+    in: path
+    required: true
+    description: The id of the foo
+    type: string
+definitions:
+  Foo:
+    required:
+      - foo
+    properties:
+      foo:
+        type: array
+        description: A list of bars
+        items:
+          $ref: '#/definitions/Bar'
+  Bar:
+    required:
+      - barId
+      - title
+      - path
+    properties:
+      barId:
+        type: string
+      parentId:
+        description: If the view is a child item `parentId` is the `barId` of the foo parent.
+        type: string
+      title:
+        type: string
+      path:
+        type: string
+  Error:
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
