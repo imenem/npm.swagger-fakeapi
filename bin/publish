@@ -4,9 +4,6 @@ const execFile = require('child_process').execFile
 const pkg = require('../package.json')
 
 execFile('npm', ['info', `${pkg.name}@${pkg.version}`], (infoerr, info, infostderr) => {
-  if (infoerr instanceof Error) {
-    throw infoerr
-  }
   process.stderr.write(infostderr)
   if (info.indexOf('undefined') === 0) {
     process.stdout.write(`Attempting to publish ${pkg.name}@${pkg.version}\n`)
