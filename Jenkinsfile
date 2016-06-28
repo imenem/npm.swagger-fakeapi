@@ -10,6 +10,7 @@ node {
   stage 'Builder'
   String hashString = """
     ${new File("${pwd()}/package.json".toString()).getText("UTF-8")}
+    ${new File("${pwd()}/bin/publish".toString()).getText("UTF-8")}
   """
   env.IMAGE_TAG = generateMD5(hashString.toString())
   echo "Using IMAGE_TAG: ${env.IMAGE_TAG}".toString()
