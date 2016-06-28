@@ -1,6 +1,6 @@
 {
   "name": "swagger-fakeapi",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Run contract (Swagger 2.0) based server that generates fake data.",
   "license": "Unlicensed",
   "repository": "Icelandair/node.swagger-fakeapi",
