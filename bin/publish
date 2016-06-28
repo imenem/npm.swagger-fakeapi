@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+const execFile = require('child_process').execFile
+const pkg = require('../package.json')
+
+execFile('npm', ['info', `${pkg.name}@${pkg.version}`], (infoerr, info, infostderr) => {
+  if (infoerr instanceof Error) {
+    throw infoerr
+  }
+  process.stderr.write(infostderr)
+  if (info.indexOf('undefined') === 0) {
+    process.stdout.write(`Attempting to publish ${pkg.name}@${pkg.version}\n`)
+    execFile('npm', ['publish'], (err, out, stderr) => {
+      if (err instanceof Error) {
+        throw err
+      }
+      process.stderr.write(stderr)
+      process.stdout.write(out)
+      // TODO: properly check if truly successfull
+      process.stdout.write(`Successfully published ${pkg.name}@${pkg.version}\n`)
+      process.exit(0)
+    })
+  } else {
+    process.stdout.write(`Skipping publish, package ${pkg.name}@${pkg.version} already published\n`)
+    process.exit(0)
+  }
+})
