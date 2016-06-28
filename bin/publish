@@ -20,7 +20,12 @@ const publish = () => {
 try {
   execFile('npm', ['info', `${pkg.name}@${pkg.version}`], (infoerr, info, infostderr) => {
     if (infoerr instanceof Error) {
-      return
+      if (infoerr.message.indexOf('npm ERR! 404') !== -1) {
+        publish()
+      }
+      else {
+        throw infoerr
+      }
     }
     process.stderr.write(infostderr)
     if (info.indexOf('undefined') === 0) {
