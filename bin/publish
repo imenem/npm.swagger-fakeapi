@@ -19,9 +19,6 @@ const publish = () => {
 
 try {
   execFile('npm', ['info', `${pkg.name}@${pkg.version}`], (infoerr, info, infostderr) => {
-    if (infoerr instanceof Error) {
-      throw infoerr
-    }
     process.stderr.write(infostderr)
     if (info.indexOf('undefined') === 0) {
       publish()
