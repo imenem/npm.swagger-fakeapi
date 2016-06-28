@@ -22,10 +22,9 @@ try {
     if (infoerr instanceof Error) {
       if (infoerr.message.indexOf('npm ERR! 404') !== -1) {
         publish()
+        return
       }
-      else {
-        throw infoerr
-      }
+      throw infoerr
     }
     process.stderr.write(infostderr)
     if (info.indexOf('undefined') === 0) {
