@@ -1,0 +1,7 @@
+bin
+.eslintrc
+.gitattributes
+.gitignore
+Dockerfile
+Jenkinsfile
+Makefile

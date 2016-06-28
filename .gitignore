@@ -1,0 +1,17 @@
+node_modules
+temp
+*.log
+
+### JetBrains template
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
+*.iml
+
+## Directory-based project format:
+.idea/
+
+# Coverage
+.nyc_output
+coverage
+
+# Make sure not to check in dev data
+contracts
