@@ -15,4 +15,3 @@ rules:
   no-underscore-dangle: off
   no-unsafe-finally: off
   no-useless-computed-key: off
-  no-restricted-syntax: off
