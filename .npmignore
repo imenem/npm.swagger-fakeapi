@@ -2,6 +2,9 @@ bin
 .eslintrc
 .gitattributes
 .gitignore
+.nyc_output
 Dockerfile
 Jenkinsfile
 Makefile
+contracts
+coverage
