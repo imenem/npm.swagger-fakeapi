@@ -16,3 +16,4 @@ rules:
   no-unsafe-finally: off
   no-useless-computed-key: off
   no-use-before-define: off
+  no-loop-func: off
