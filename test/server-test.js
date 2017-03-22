@@ -1,11 +1,21 @@
+/* eslint-disable arrow-body-style */
+
 const test = require('ava')
 const path = require('path')
 const request = require('supertest-as-promised')
 
-const server = require(path.resolve(__dirname, '../lib/server'))(path.resolve(__dirname, './contracts-test'))
+const mockserver = require(path.resolve(__dirname, '../lib/server'))
+const options = {
+  contracts: path.resolve(__dirname, './contracts-test/*yml'),
+  verbose: false,
+}
 
-test('/api/v1/foo/fooId returns 400 status code', async t => {
-  const res = await request(server.listen()).get('/api/v1/foo/fooId')
-
-  t.is(res.status, 400)
+test('server', t => {
+  mockserver(options)
+    .then(servers => {
+      return request(servers[0].listen(8888)).get('/api/v1/foo/fooId/')
+    })
+    .then(res => {
+      t.is(res.status, 400, 'responds to queries')
+    })
 })
