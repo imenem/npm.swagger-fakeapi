@@ -26,6 +26,7 @@
   "dependencies": {
     "array-range": "^1.0.1",
     "express": "^4.14.0",
+    "faker": "~4.1.0",
     "glob": "^7.0.5",
     "swagger-parser": "^4.0.0-beta.2",
     "swagger-server": "^1.0.0-alpha.18",
