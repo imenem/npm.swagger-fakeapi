@@ -27,18 +27,22 @@ The mocker tries to guess what style a value should be based on the type, format
 * country
 * currency
 * date
+* dateTime
 * email
+* firstName
 * id
 * imageUrl
+* lastName
 * locale
+* middleName
 * paragraph
 * path
 * phoneNumber
 * slug
-* dateTime
 * title
 * type
 * url
+* uuid
 * word
 
 This example schema:
