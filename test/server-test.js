@@ -7,7 +7,7 @@ const request = require('supertest-as-promised')
 const mockserver = require(path.resolve(__dirname, '../lib/server'))
 const options = {
   contracts: path.resolve(__dirname, './contracts-test/*yml'),
-  verbose: false,
+  verbose: false
 }
 
 test('server', t => {

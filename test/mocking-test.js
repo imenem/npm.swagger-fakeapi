@@ -4,8 +4,8 @@ const test = require('ava')
 const path = require('path')
 const fake = require(path.resolve(__dirname, '../lib/fake'))
 
-function randomizer() {
-  const seq = arguments.length ? Array.from(arguments) : [0.7]
+function randomizer () {
+  const seq = arguments.length ? Array.from(arguments) : [ 0.7 ]
   let pos = 0
   return { random: () => seq[(pos++) % seq.length] }
 }
@@ -276,7 +276,7 @@ test('fake paragraph', t => {
 
 test('fake paragraphs', t => {
   const rnd = randomizer(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
-  t.is(fake.paragraphs(rnd), `Quisquam recusandae alias consequuntur corporis repellat ratione ut sunt qui. Iure ut libero qui. Ut nulla quam ipsam nobis cupiditate sed dignissimos debitis incidunt. Sed libero repudiandae.\n \rNatus et eos itaque velit omnis. Porro ut et ipsam explicabo eligendi occaecati debitis et. Eum dicta eum eaque enim ipsum inventore debitis libero aspernatur. Quam tempore a velit provident velit eligendi.\n \rQui nobis repellendus fugiat velit. Aperiam placeat fuga. Distinctio placeat ullam minima ducimus temporibus modi aut architecto ducimus. Voluptates explicabo exercitationem ut quis sed.`, 'emits a predictable set of paragraphs')
+  t.is(fake.paragraphs(rnd), 'Quisquam recusandae alias consequuntur corporis repellat ratione ut sunt qui. Iure ut libero qui. Ut nulla quam ipsam nobis cupiditate sed dignissimos debitis incidunt. Sed libero repudiandae.\n \rNatus et eos itaque velit omnis. Porro ut et ipsam explicabo eligendi occaecati debitis et. Eum dicta eum eaque enim ipsum inventore debitis libero aspernatur. Quam tempore a velit provident velit eligendi.\n \rQui nobis repellendus fugiat velit. Aperiam placeat fuga. Distinctio placeat ullam minima ducimus temporibus modi aut architecto ducimus. Voluptates explicabo exercitationem ut quis sed.', 'emits a predictable set of paragraphs')
 })
 
 test('fake html', t => {

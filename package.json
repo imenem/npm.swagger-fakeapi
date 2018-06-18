@@ -32,11 +32,11 @@
     "xorshift": "^0.2.0"
   },
   "devDependencies": {
+    "@icelandair/eslint-config": "^2.3.0",
     "ava": "^0.15.2",
-    "babel-eslint": "^6.1.0",
-    "eslint": "^2.13.1",
-    "eslint-config-icelandair": "^1.0.0",
-    "eslint-plugin-import": "^1.9.2",
+    "babel-eslint": "^8.2.2",
+    "eslint": "^4.18.2",
+    "eslint-plugin-import": "^2.9.0",
     "nyc": "^6.6.1",
     "supertest": "^1.2.0",
     "supertest-as-promised": "^3.1.0",
