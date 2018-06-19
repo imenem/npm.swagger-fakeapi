@@ -45,7 +45,7 @@ build:
 	npm run build
 
 publish:
-	./bin/publish
+	./scripts/publish
 
 # Container
 docker:
