@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+const glob = require('glob')
+const pkg = require('../package.json')
+const path = require('path')
+const fs = require('fs')
+
+const opts = {
+  autostart: true,
+  verbose: false,
+  useExampleProp: false,
+  port: 8000,
+  contracts: '',
+}
+
+function usage () {
+  console.log(`${pkg.name}, version ${pkg.version}
+
+usage: ${pkg.name} [--verbose] [--examples] [--port PORT] CONTRACTSPATH
+
+  v / verbose  : log all activity to console
+  e / examples : return example properties rather than mocks where found in contracts
+  p / port     : specify a port for the server to run on
+`)
+}
+
+const argv = process.argv.filter(d => !/\/(node|bin\/swagger-fakeapi)$/.test(d))
+if (!argv.length) {
+  usage()
+  process.exit()
+}
+while (argv.length) {
+  const val = argv.shift()
+  if (val === '--verbose' || val === '-v') {
+    opts.verbose = true
+  }
+  else if (val === '--examples' || val === '-e') {
+    opts.useExampleProp = true
+  }
+  else if (val === '--port' || val === '-p') {
+    const port = argv.shift()
+    if (!port || isNaN(port) || !isFinite(port)) {
+      console.log(`${port} is not a valid port number`)
+      process.exit(1)
+    }
+    else {
+      opts.port = port
+    }
+  }
+  else if (!opts.contracts) {
+    opts.contracts = path.resolve(process.cwd(), val.replace(/~/, process.env.HOME))
+    // attempt to expand any directories used as arguments
+    try {
+      if (fs.lstatSync(opts.contracts).isDirectory()) {
+        opts.contracts = opts.contracts.replace(/\/?$/, '/*.{yml,yaml,json}')
+      }
+    }
+    catch (err) {
+      if (err.code !== 'ENOENT') {
+        console.log(err.message);
+        process.exit(1);
+      }
+    }
+  }
+  else {
+    usage()
+  }
+}
+
+if (!opts.contracts) {
+  usage()
+}
+else {
+  require('../lib')(opts)
+}
