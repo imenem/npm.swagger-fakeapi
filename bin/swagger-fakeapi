@@ -24,7 +24,7 @@ usage: ${pkg.name} [--verbose] [--examples] [--port PORT] CONTRACTSPATH
 `)
 }
 
-const argv = process.argv.filter(d => !/\/(node|bin\/swagger-fakeapi)$/.test(d))
+const argv = process.argv.filter(d => !/\/(node|\.?bin\/swagger-fakeapi)$/.test(d))
 if (!argv.length) {
   usage()
   process.exit()
