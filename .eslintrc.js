@@ -1,7 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: [
-    '@icelandair/eslint-config/basic'
+    'eslint-config-icelandair/basic'
   ],
   rules: {
     'no-lonely-if': 'error',
