@@ -29,8 +29,9 @@
     "express": "^4.14.0",
     "faker": "~4.1.0",
     "glob": "^7.0.5",
-    "swagger-server": "^1.0.0-alpha.18",
-    "xorshift": "^0.2.0"
+    "swagger-server": "1.0.0-alpha.19",
+    "xorshift": "^0.2.0",
+    "swagger-express-middleware": "1.0.0-alpha.12"
   },
   "devDependencies": {
     "eslint-config-icelandair": "^2.1.1",
