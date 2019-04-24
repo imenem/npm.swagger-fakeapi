@@ -30,8 +30,7 @@
     "faker": "~4.1.0",
     "glob": "^7.0.5",
     "moment-timezone": "^0.5.23",
-    "swagger-express-middleware": "imenem/swagger-express-middleware#ee3a6bc395e423c1c9538daa9f5a6de28e7f9088",
-    "swagger-server": "1.0.0-alpha.19",
+    "swagger-server": "imenem/swagger-server#afb49e0e7e8f2fa8c151160c7bc5d40c5625a889",
     "xorshift": "^0.2.0"
   },
   "devDependencies": {
